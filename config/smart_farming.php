@@ -2,7 +2,7 @@
 
 return [
     'dashboard' => [
-        'default_device_uid' => env('SMART_FARMING_DEVICE_UID', 'ESP32-001'),
+        'default_device_uid' => env('SMART_FARMING_DEVICE_UID', 'ESP32-01'),
         'refresh_interval_seconds' => 1,
     ],
 

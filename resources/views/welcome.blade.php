@@ -242,6 +242,250 @@
             font-weight: 500;
             color: var(--muted);
         }
+
+        /* ===== AI CHATBOT WIDGET ===== */
+        .ai-fab {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #2d6a4f, #40916c);
+            color: #fff;
+            box-shadow: 0 6px 28px rgba(45,106,79,0.45);
+            cursor: pointer;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s cubic-bezier(.4,0,.2,1), box-shadow 0.3s ease;
+        }
+        .ai-fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 36px rgba(45,106,79,0.55);
+        }
+        .ai-fab.hidden { display: none; }
+        .ai-fab svg { width: 28px; height: 28px; }
+
+        .ai-chat-panel {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 380px;
+            max-width: calc(100vw - 32px);
+            height: 560px;
+            max-height: calc(100vh - 48px);
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(20px) saturate(1.6);
+            -webkit-backdrop-filter: blur(20px) saturate(1.6);
+            border-radius: 24px;
+            box-shadow: 0 16px 64px rgba(0,0,0,0.14), 0 0 0 1px rgba(45,106,79,0.08);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+            pointer-events: none;
+            transition: opacity 0.35s cubic-bezier(.4,0,.2,1), transform 0.35s cubic-bezier(.4,0,.2,1);
+        }
+        .ai-chat-panel.open {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .ai-chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 20px;
+            background: linear-gradient(135deg, #2d6a4f, #40916c);
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .ai-chat-header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .ai-chat-header-avatar {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .ai-chat-header-avatar svg { width: 20px; height: 20px; }
+        .ai-chat-header-info h3 {
+            margin: 0; font-size: 15px; font-weight: 700;
+        }
+        .ai-chat-header-info p {
+            margin: 2px 0 0; font-size: 11px; opacity: 0.8;
+        }
+        .ai-chat-close {
+            background: rgba(255,255,255,0.15);
+            border: none; border-radius: 50%;
+            width: 32px; height: 32px;
+            cursor: pointer; color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s;
+        }
+        .ai-chat-close:hover { background: rgba(255,255,255,0.3); }
+        .ai-chat-close svg { width: 18px; height: 18px; }
+
+        .ai-chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 16px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .ai-chat-messages::-webkit-scrollbar { width: 4px; }
+        .ai-chat-messages::-webkit-scrollbar-track { background: transparent; }
+        .ai-chat-messages::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+
+        .ai-msg {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 13.5px;
+            line-height: 1.5;
+            word-break: break-word;
+            animation: msgFadeIn 0.3s ease;
+        }
+        @keyframes msgFadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .ai-msg.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #2d6a4f, #40916c);
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+        .ai-msg.bot {
+            align-self: flex-start;
+            background: #f0f4f1;
+            color: var(--text);
+            border-bottom-left-radius: 4px;
+        }
+        .ai-msg.bot .msg-label,
+        .ai-msg.user .msg-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            opacity: 0.7;
+        }
+        .ai-msg.system {
+            align-self: center;
+            background: transparent;
+            color: var(--muted);
+            font-size: 12px;
+            text-align: center;
+            padding: 4px 8px;
+        }
+
+        .ai-typing {
+            display: flex;
+            gap: 4px;
+            padding: 12px 14px;
+            align-self: flex-start;
+            background: #f0f4f1;
+            border-radius: 16px;
+            border-bottom-left-radius: 4px;
+        }
+        .ai-typing span {
+            width: 7px; height: 7px;
+            background: #40916c;
+            border-radius: 50%;
+            animation: typingDot 1.4s infinite ease-in-out;
+        }
+        .ai-typing span:nth-child(2) { animation-delay: 0.2s; }
+        .ai-typing span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingDot {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-6px); opacity: 1; }
+        }
+
+        .ai-chat-input-area {
+            padding: 12px 16px 16px;
+            border-top: 1px solid rgba(0,0,0,0.06);
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            flex-shrink: 0;
+            background: rgba(255,255,255,0.6);
+        }
+        .ai-chat-input {
+            flex: 1;
+            border: 1.5px solid #dde2df;
+            border-radius: 14px;
+            padding: 10px 14px;
+            font-size: 13.5px;
+            font-family: inherit;
+            background: #fff;
+            resize: none;
+            min-height: 40px;
+            max-height: 100px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .ai-chat-input:focus {
+            border-color: #40916c;
+        }
+        .ai-chat-input::placeholder {
+            color: #adb3b5;
+        }
+
+        .ai-btn-icon {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, transform 0.15s;
+            flex-shrink: 0;
+        }
+        .ai-btn-icon:active { transform: scale(0.92); }
+
+        .ai-btn-send {
+            background: linear-gradient(135deg, #2d6a4f, #40916c);
+            color: #fff;
+        }
+        .ai-btn-send:hover { background: linear-gradient(135deg, #1b4332, #2d6a4f); }
+        .ai-btn-send:disabled { opacity: 0.5; cursor: not-allowed; }
+        .ai-btn-send svg { width: 18px; height: 18px; }
+
+        .ai-btn-voice {
+            background: #f0f4f1;
+            color: #2d6a4f;
+        }
+        .ai-btn-voice:hover { background: #dde8df; }
+        .ai-btn-voice svg { width: 20px; height: 20px; }
+        .ai-btn-voice.recording {
+            background: #ef4444;
+            color: #fff;
+            animation: pulseRecord 1.5s infinite;
+        }
+        @keyframes pulseRecord {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(239,68,68,0); }
+        }
+
+        .ai-voice-status {
+            text-align: center;
+            font-size: 11px;
+            color: var(--muted);
+            padding: 0 16px 8px;
+        }
+        .ai-voice-status.recording-text { color: #ef4444; font-weight: 600; }
     </style>
 </head>
 
@@ -350,11 +594,14 @@
         </section>
     </main>
 
-    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <script>
-        const refreshMs = Number(@json(($refreshIntervalSeconds ?? 1) * 1000));
-        const reverb = @json($reverb ?? []);
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const refreshMs = Number(@json(config('smart_farming.dashboard.refresh_interval_seconds', 1) * 1000));
+        const FIREBASE_BASE = @json(config(
+                'smart_farming.firebase_base',
+                env('FIREBASE_BASE', 'https://smart-farming-90ebf-default-rtdb.firebaseio.com')));
+        const DEVICE_UID = @json(config('smart_farming.dashboard.default_device_uid', env('SMART_FARMING_DEVICE_UID', 'ESP32-01')));
 
         const el = {
             syncNote: document.getElementById('sync-note'),
@@ -380,7 +627,6 @@
         let currentPumpOn = false;
         let busy = false;
         let fallbackPollingId = null;
-        let wsConnected = false;
 
         function setSyncMessage(text, isError = false) {
             el.syncNote.textContent = text;
@@ -400,6 +646,24 @@
             if (value === 'low') return 'Kering';
             if (value === 'high') return 'Tinggi';
             return '-';
+        }
+
+        function latestTelemetry(node) {
+            if (!node || typeof node !== 'object') return {};
+
+            const keys = Object.keys(node);
+            if (keys.length === 0) return {};
+
+            const looksLikeTelemetry = ['soil_moisture', 'air_temperature', 'air_humidity', 'pump_status']
+                .some((key) => Object.prototype.hasOwnProperty.call(node, key));
+
+            if (looksLikeTelemetry) {
+                return node;
+            }
+
+            const lastKey = keys[keys.length - 1];
+            const lastValue = node[lastKey];
+            return (lastValue && typeof lastValue === 'object') ? lastValue : {};
         }
 
         function render(data) {
@@ -467,10 +731,41 @@
 
         async function loadLiveData() {
             try {
-                const payload = await requestJson('/dashboard/live');
-                render(payload.data || {});
-                const source = wsConnected ? 'WebSocket' : 'Polling fallback';
-                setSyncMessage(`Realtime aktif via ${source} (${new Date().toLocaleTimeString('id-ID')})`);
+                const [telemetryResp, cmdResp, baseResp] = await Promise.all([
+                    fetch(`${FIREBASE_BASE}/smart_farming/telemetry/${DEVICE_UID}.json`),
+                    fetch(`${FIREBASE_BASE}/smart_farming/commands/${DEVICE_UID}.json`),
+                    fetch(`${FIREBASE_BASE}/smart_farming.json`),
+                ]);
+
+                const telemetryJson = await telemetryResp.json();
+                const cmdJson = await cmdResp.json();
+                const baseJson = await baseResp.json();
+
+                const latest = latestTelemetry(telemetryJson);
+                const legacy = baseJson && typeof baseJson === 'object' ? baseJson : {};
+
+                const pumpMode = cmdJson?.pump_mode ?? legacy.pump_mode ?? 'automatic';
+                const telemetryPump = latest.pump_status ?? latest.pump ?? legacy.pump_status ?? legacy.pump_state ??
+                    legacy.pump ?? false;
+                const commandPump = cmdJson?.pump_state ?? false;
+
+                const payload = {
+                    soil_moisture: latest.soil_moisture ?? latest.soil ?? legacy.soil_moisture ?? legacy.soil ??
+                        null,
+                    air_temperature: latest.air_temperature ?? latest.temperature ?? legacy.air_temperature ??
+                        legacy.temperature ?? null,
+                    air_humidity: latest.air_humidity ?? latest.humidity ?? legacy.air_humidity ?? legacy
+                        .humidity ?? null,
+                    soil_status: latest.soil_status ?? legacy.soil_status ?? null,
+                    temperature_status: latest.temperature_status ?? legacy.temperature_status ?? null,
+                    humidity_status: latest.humidity_status ?? legacy.humidity_status ?? null,
+                    pump_mode: pumpMode,
+                    pump_state: pumpMode === 'manual' ? commandPump : telemetryPump,
+                    recorded_at: latest.recorded_at ?? latest.ts ?? legacy.recorded_at ?? null,
+                };
+
+                render(payload);
+                setSyncMessage(`Realtime aktif via Firebase (${new Date().toLocaleTimeString('id-ID')})`);
             } catch (error) {
                 setSyncMessage(error.message || 'Gagal mengambil data realtime.', true);
             }
@@ -493,55 +788,9 @@
             fallbackPollingId = null;
         }
 
-        function initReverbRealtime() {
-            const hasConfig = reverb && reverb.key && reverb.host && reverb.port;
-
-            if (!hasConfig || !window.Pusher) {
-                setSyncMessage('Konfigurasi Reverb belum lengkap, memakai polling fallback.', true);
-                startFallbackPolling();
-                return;
-            }
-
-            const forceTLS = String(reverb.scheme || 'http').toLowerCase() === 'https';
-            const configHost = String(reverb.host || '').toLowerCase();
-            const wsHost = (configHost === 'localhost' || configHost === '127.0.0.1') ?
-                window.location.hostname :
-                reverb.host;
-
-            const pusher = new window.Pusher(reverb.key, {
-                wsHost,
-                wsPort: Number(reverb.port),
-                wssPort: Number(reverb.port),
-                forceTLS,
-                enabledTransports: ['ws', 'wss'],
-                disableStats: true,
-                cluster: 'mt1',
-            });
-
-            pusher.connection.bind('connected', () => {
-                wsConnected = true;
-                stopFallbackPolling();
-                setSyncMessage(`Realtime aktif via WebSocket (${new Date().toLocaleTimeString('id-ID')})`);
-            });
-
-            pusher.connection.bind('disconnected', () => {
-                wsConnected = false;
-                setSyncMessage('Koneksi WebSocket terputus, fallback polling aktif.', true);
-                startFallbackPolling();
-            });
-
-            pusher.connection.bind('error', () => {
-                wsConnected = false;
-                setSyncMessage('Koneksi WebSocket gagal, fallback polling aktif.', true);
-                startFallbackPolling();
-            });
-
-            const channel = pusher.subscribe(reverb.channel || 'smart-farming.dashboard');
-            channel.bind(reverb.event || 'dashboard.updated', (payload) => {
-                const data = payload?.data || payload || {};
-                render(data);
-                setSyncMessage(`Update realtime diterima (${new Date().toLocaleTimeString('id-ID')})`);
-            });
+        function initRealtime() {
+            // We rely on Firebase REST polling for now; start polling loop
+            startFallbackPolling();
         }
 
         async function updateMode(mode) {
@@ -552,12 +801,39 @@
             setSyncMessage('Mengubah mode pompa...');
 
             try {
-                await requestJson('/dashboard/mode', {
+                // Write command object to Firebase
+                const cmd = {
+                    pump_mode: mode,
+                    pump_state: currentPumpOn,
+                    last_changed_at: new Date().toISOString()
+                };
+                const url = `${FIREBASE_BASE}/smart_farming/commands/${DEVICE_UID}.json`;
+                await fetch(url, {
+                    method: 'PUT',
+                    body: JSON.stringify(cmd)
+                });
+
+                // Also write pump_state node and log
+                const stateUrl = `${FIREBASE_BASE}/smart_farming/pump_state/${DEVICE_UID}.json`;
+                await fetch(stateUrl, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        is_on: currentPumpOn,
+                        mode: mode,
+                        last_changed_at: new Date().toISOString()
+                    })
+                });
+
+                await fetch(`${FIREBASE_BASE}/smart_farming/pump_logs/${DEVICE_UID}.json`, {
                     method: 'POST',
                     body: JSON.stringify({
-                        mode
-                    }),
+                        source: 'dashboard',
+                        action: 'mode_changed',
+                        mode,
+                        at: new Date().toISOString()
+                    })
                 });
+
                 await loadLiveData();
             } catch (error) {
                 setSyncMessage(error.message || 'Gagal mengubah mode.', true);
@@ -574,15 +850,40 @@
             el.btnSiram.disabled = true;
             setSyncMessage('Mengirim perintah pompa...');
 
-            const action = currentPumpOn ? 'off' : 'on';
+            const newState = !currentPumpOn;
 
             try {
-                await requestJson('/dashboard/siram', {
+                // write command and pump_state
+                const cmd = {
+                    pump_mode: 'manual',
+                    pump_state: newState,
+                    last_changed_at: new Date().toISOString()
+                };
+                const url = `${FIREBASE_BASE}/smart_farming/commands/${DEVICE_UID}.json`;
+                await fetch(url, {
+                    method: 'PUT',
+                    body: JSON.stringify(cmd)
+                });
+
+                const stateUrl = `${FIREBASE_BASE}/smart_farming/pump_state/${DEVICE_UID}.json`;
+                await fetch(stateUrl, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        is_on: newState,
+                        mode: 'manual',
+                        last_changed_at: new Date().toISOString()
+                    })
+                });
+
+                await fetch(`${FIREBASE_BASE}/smart_farming/pump_logs/${DEVICE_UID}.json`, {
                     method: 'POST',
                     body: JSON.stringify({
-                        action
-                    }),
+                        source: 'dashboard',
+                        action: newState ? 'switched_on' : 'switched_off',
+                        at: new Date().toISOString()
+                    })
                 });
+
                 await loadLiveData();
             } catch (error) {
                 setSyncMessage(error.message || 'Perintah siram gagal.', true);
@@ -598,7 +899,281 @@
 
         loadLiveData();
         startFallbackPolling();
-        initReverbRealtime();
+        initRealtime();
+    </script>
+
+    <!-- ===== AI CHATBOT WIDGET HTML ===== -->
+    <!-- Floating Action Button -->
+    <button id="ai-fab" class="ai-fab" aria-label="Buka AI Assistant">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+    </button>
+
+    <!-- Chat Panel -->
+    <div id="ai-chat-panel" class="ai-chat-panel" role="dialog" aria-label="AI Smart Farming Assistant">
+        <!-- Header -->
+        <div class="ai-chat-header">
+            <div class="ai-chat-header-left">
+                <div class="ai-chat-header-avatar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+                    </svg>
+                </div>
+                <div class="ai-chat-header-info">
+                    <h3>AI Smart Farming</h3>
+                    <p>Asisten pertanian cerdas Anda</p>
+                </div>
+            </div>
+            <button id="ai-chat-close" class="ai-chat-close" aria-label="Tutup chat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Messages -->
+        <div id="ai-messages" class="ai-chat-messages">
+            <div class="ai-msg bot">
+                <div class="msg-label">AI Assistant</div>
+                Halo! Saya asisten AI untuk Smart Farming Anda 🌱 Tanya apa saja tentang kondisi tanaman, kelembapan, suhu, atau cara merawat tanaman Anda!
+            </div>
+        </div>
+
+        <!-- Voice Status -->
+        <div id="ai-voice-status" class="ai-voice-status" style="display:none;"></div>
+
+        <!-- Input Area -->
+        <div class="ai-chat-input-area">
+            <textarea id="ai-chat-input" class="ai-chat-input" placeholder="Ketik pesan..." rows="1" aria-label="Pesan chat"></textarea>
+            <button id="ai-btn-voice" class="ai-btn-icon ai-btn-voice" aria-label="Rekam suara">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/>
+                    <line x1="8" y1="23" x2="16" y2="23"/>
+                </svg>
+            </button>
+            <button id="ai-btn-send" class="ai-btn-icon ai-btn-send" aria-label="Kirim pesan">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // ===== AI CHATBOT JAVASCRIPT =====
+        const aiFab        = document.getElementById('ai-fab');
+        const aiPanel      = document.getElementById('ai-chat-panel');
+        const aiClose      = document.getElementById('ai-chat-close');
+        const aiMessages   = document.getElementById('ai-messages');
+        const aiInput      = document.getElementById('ai-chat-input');
+        const aiBtnSend    = document.getElementById('ai-btn-send');
+        const aiBtnVoice   = document.getElementById('ai-btn-voice');
+        const aiVoiceStat  = document.getElementById('ai-voice-status');
+        const csrfToken    = document.querySelector('meta[name="csrf-token"]').content;
+
+        let aiIsOpen       = false;
+        let aiIsBusy       = false;
+        let mediaRecorder  = null;
+        let audioChunks    = [];
+        let isRecording    = false;
+
+        // Toggle panel
+        function toggleAiPanel() {
+            aiIsOpen = !aiIsOpen;
+            aiPanel.classList.toggle('open', aiIsOpen);
+            aiFab.classList.toggle('hidden', aiIsOpen);
+            if (aiIsOpen) { aiInput.focus(); scrollToBottom(); }
+        }
+
+        aiFab.addEventListener('click', toggleAiPanel);
+        aiClose.addEventListener('click', toggleAiPanel);
+
+        function scrollToBottom() {
+            aiMessages.scrollTop = aiMessages.scrollHeight;
+        }
+
+        function addMessage(text, role) {
+            const div = document.createElement('div');
+            div.className = `ai-msg ${role}`;
+            if (role !== 'system') {
+                const label = document.createElement('div');
+                label.className = 'msg-label';
+                label.textContent = role === 'user' ? 'Anda' : 'AI Assistant';
+                div.appendChild(label);
+            }
+            const content = document.createElement('span');
+            content.textContent = text;
+            div.appendChild(content);
+            aiMessages.appendChild(div);
+            scrollToBottom();
+        }
+
+        function showTyping() {
+            const div = document.createElement('div');
+            div.className = 'ai-typing';
+            div.id = 'ai-typing-indicator';
+            div.innerHTML = '<span></span><span></span><span></span>';
+            aiMessages.appendChild(div);
+            scrollToBottom();
+            return div;
+        }
+
+        function removeTyping() {
+            const t = document.getElementById('ai-typing-indicator');
+            if (t) t.remove();
+        }
+
+        // Send text message
+        async function sendChatMessage() {
+            const msg = aiInput.value.trim();
+            if (!msg || aiIsBusy) return;
+
+            aiIsBusy = true;
+            aiBtnSend.disabled = true;
+            addMessage(msg, 'user');
+            aiInput.value = '';
+            aiInput.style.height = 'auto';
+            const typing = showTyping();
+
+            try {
+                const res = await fetch('/ai/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({ message: msg }),
+                });
+                const data = await res.json();
+                removeTyping();
+                if (data.reply) {
+                    addMessage(data.reply, 'bot');
+                    speakText(data.reply);
+                } else {
+                    addMessage('Maaf, terjadi kesalahan. Coba lagi.', 'system');
+                }
+            } catch (e) {
+                removeTyping();
+                addMessage('Gagal terhubung ke AI. Periksa koneksi Anda.', 'system');
+            } finally {
+                aiIsBusy = false;
+                aiBtnSend.disabled = false;
+            }
+        }
+
+        aiBtnSend.addEventListener('click', sendChatMessage);
+        aiInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); }
+        });
+        aiInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+        });
+
+        // ===== WEB SPEECH API (NATIVE VOICE STT & TTS) =====
+        let recognition = null;
+        let isSpeaking = false;
+        const synth = window.speechSynthesis;
+
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'id-ID'; // Bahasa Indonesia
+
+            recognition.onstart = () => {
+                isRecording = true;
+                aiIsBusy = true;
+                aiBtnVoice.classList.add('recording');
+                aiVoiceStat.style.display = 'block';
+                aiVoiceStat.className = 'ai-voice-status recording-text';
+                aiVoiceStat.textContent = '🎙️ Mendengarkan... Silakan bicara.';
+                
+                // Matikan suara AI jika sedang berbicara saat user mau bicara
+                if (synth && synth.speaking) {
+                    synth.cancel();
+                }
+            };
+
+            recognition.onresult = (event) => {
+                const speechToText = event.results[0][0].transcript;
+                aiInput.value = speechToText;
+                sendChatMessage();
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech Recognition Error:', event.error);
+                if (event.error === 'not-allowed') {
+                    addMessage('Izin mikrofon ditolak. Periksa pengaturan browser Anda.', 'system');
+                } else {
+                    addMessage('Gagal mengenali suara. Coba bicara lebih jelas.', 'system');
+                }
+            };
+
+            recognition.onend = () => {
+                isRecording = false;
+                aiIsBusy = false;
+                aiBtnVoice.classList.remove('recording');
+                aiVoiceStat.style.display = 'none';
+            };
+        }
+
+        // Jalankan voice recording atau stop AI suara
+        aiBtnVoice.addEventListener('click', () => {
+            if (synth && synth.speaking) {
+                synth.cancel();
+                return;
+            }
+
+            if (!recognition) {
+                addMessage('Browser Anda tidak mendukung fitur suara (STT). Gunakan Google Chrome/Microsoft Edge.', 'system');
+                return;
+            }
+
+            if (isRecording) {
+                recognition.stop();
+            } else {
+                recognition.start();
+            }
+        });
+
+        // Fungsi Text-To-Speech (Membaca Teks Jawaban)
+        function speakText(text) {
+            if (!synth) return;
+
+            // Batalkan suara yang sedang berjalan jika ada
+            if (synth.speaking) {
+                synth.cancel();
+            }
+
+            // Hilangkan emoji dan teks khusus agar dibaca lebih natural
+            const cleanText = text
+                .replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "")
+                .replace(/\*+/g, ""); // Hilangkan format markdown bold
+
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            utterance.lang = 'id-ID'; // Bahasa Indonesia
+            utterance.rate = 1.0;     // Kecepatan membaca
+            utterance.pitch = 1.0;    // Nada suara
+
+            // Pilih suara Bahasa Indonesia jika tersedia
+            const voices = synth.getVoices();
+            const indVoice = voices.find(v => v.lang.startsWith('id') || v.lang.includes('Indonesia'));
+            if (indVoice) {
+                utterance.voice = indVoice;
+            }
+
+            synth.speak(utterance);
+        }
+
+        // Chrome memuat suara secara async, picu pemuatan getVoices
+        if (synth && synth.onvoiceschanged !== undefined) {
+            synth.onvoiceschanged = () => { synth.getVoices(); };
+        }
     </script>
 </body>
 

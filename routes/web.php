@@ -15,3 +15,9 @@ Route::get('/dashboard/live', [DashboardController::class, 'live'])
     ]);
 Route::post('/dashboard/mode', [DashboardController::class, 'mode']);
 Route::post('/dashboard/siram', [DashboardController::class, 'siram']);
+
+use App\Http\Controllers\AiController;
+
+// AI Chat & Voice routes
+Route::post('/ai/chat', [AiController::class, 'chat']);
+Route::post('/ai/voice', [AiController::class, 'voice']);

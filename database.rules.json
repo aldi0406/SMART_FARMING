@@ -1,0 +1,22 @@
+{
+    "rules": {
+        "smart_farming": {
+            "telemetry": {
+                "$deviceUid": {
+                    ".read": "true",
+                    ".write": "true"
+                }
+      }      ,
+      "commands": {
+        "$deviceUid": {
+          ".read": "true",
+          ".write": "tr        ue"
+              }
+            },
+      "pump_sta        te": {
+        ".read":         "true",
+        ".writ      e": "t    rue"
+     }
+    }
+  }
+}

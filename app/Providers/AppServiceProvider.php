@@ -19,6 +19,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Bypass SSL cURL error 77 di localhost (Laragon/XAMPP)
+        \Illuminate\Support\Facades\Http::globalOptions([
+            'verify' => false,
+        ]);
     }
 }

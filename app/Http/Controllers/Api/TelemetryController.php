@@ -25,15 +25,19 @@ class TelemetryController extends Controller
 
         $validated = $request->validate([
             'soil_moisture' => ['required', 'numeric', 'between:0,100'],
-            'air_temperature' => ['required', 'numeric', 'between:-20,80'],
-            'air_humidity' => ['required', 'numeric', 'between:0,100'],
+            'air_temperature' => ['nullable', 'numeric', 'between:-20,80'],
+            'air_humidity' => ['nullable', 'numeric', 'between:0,100'],
             'pump_state' => ['nullable', 'boolean'],
             'recorded_at' => ['nullable', 'date'],
         ]);
 
         $soilMoisture = (float) $validated['soil_moisture'];
-        $airTemperature = (float) $validated['air_temperature'];
-        $airHumidity = (float) $validated['air_humidity'];
+        $airTemperature = array_key_exists('air_temperature', $validated)
+            ? (float) $validated['air_temperature']
+            : null;
+        $airHumidity = array_key_exists('air_humidity', $validated)
+            ? (float) $validated['air_humidity']
+            : null;
 
         $pumpState = $this->ensurePumpState(
             $device,
@@ -105,8 +109,12 @@ class TelemetryController extends Controller
         return 'optimum';
     }
 
-    private function temperatureStatus(float $temperature): string
+    private function temperatureStatus(?float $temperature): string
     {
+        if ($temperature === null) {
+            return 'unknown';
+        }
+
         if ($temperature < 20) {
             return 'low';
         }
@@ -118,8 +126,12 @@ class TelemetryController extends Controller
         return 'high';
     }
 
-    private function humidityStatus(float $humidity): string
+    private function humidityStatus(?float $humidity): string
     {
+        if ($humidity === null) {
+            return 'unknown';
+        }
+
         if ($humidity < 40) {
             return 'low';
         }

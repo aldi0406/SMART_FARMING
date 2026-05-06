@@ -1,0 +1,7 @@
+{
+    "functions": {
+        "source": "functions"
+  },
+  "database": {
+    "rules": "database.rules.jso  n"  }
+}

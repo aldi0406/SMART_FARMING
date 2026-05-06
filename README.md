@@ -182,3 +182,20 @@ composer run dev
 
 - Device tetap kirim telemetry ke `POST /api/telemetry`
 - Dashboard menampilkan data terbaru dari tabel readings dan pump_states
+
+## Firmware ESP32
+
+Sketch ESP32 disimpan di `esp32_smart_farming.ino` pada root repository.
+
+Catatan file dan fitur penting:
+- Menangani pembacaan DHT yang `NaN` dan menghindari mengirim payload saat pembacaan invalid.
+- Mengirim `soil_moisture`, `air_temperature`, dan `air_humidity` dalam JSON ke endpoint `POST /api/telemetry`.
+- Mem-parse respons backend menggunakan `data.pump_mode` dan `data.pump_state` untuk mengatur relay.
+- Contoh kalibrasi soil moisture dan pengaturan pin ada di file sketch.
+
+Cara pakai singkat:
+1. Buka `esp32_smart_farming.ino` di Arduino IDE.
+2. Sesuaikan `WIFI_SSID`, `WIFI_PASS`, `API_URL`, `DEVICE_TOKEN`, dan kalibrasi soil.
+3. Upload ke ESP32 dan buka Serial Monitor (baud `115200`) untuk melihat `HTTP Code` dan respons.
+
+Jika perlu versi sketch yang hanya mengirim soil moisture (tanpa DHT), beri tahu saya dan saya buatkan varian yang lebih sederhana.
